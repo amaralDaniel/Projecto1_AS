@@ -59,7 +59,6 @@ public class Source_Ex1 extends FilterFramework
 				bytesread++;
 				WriteFilterOutputPort(databyte);
 				byteswritten++;
-
 			} // while
 
 		} //try
