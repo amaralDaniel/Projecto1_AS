@@ -33,7 +33,7 @@ public class Source_Ex1 extends FilterFramework
 	public void run()
 	{
 
-		String fileName = "FlightData.dat";	// Input data file.
+		String fileName = "resources/FlightData.dat";	// Input data file.
 		int bytesread = 0;					// Number of bytes read from the input file.
 		int byteswritten = 0;				// Number of bytes written to the stream.
 		DataInputStream in = null;			// File stream reference.
