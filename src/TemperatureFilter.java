@@ -1,5 +1,6 @@
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
+import java.util.Arrays;
 
 /******************************************************************************************************************
  * File:FilterTemplate.java
@@ -30,42 +31,88 @@ import java.nio.ByteOrder;
  ******************************************************************************************************************/
 
 public class TemperatureFilter extends FilterFramework {
+    /**
+     * @author Lizardo
+     * @description Fahrenheit to Celsius
+     * @param value
+     * @return
+     */
     private double farToCelsius(double value) {
         return ((value - 32.0) * 5.0) / 9.0;
     }
 
     public void run() {
-        byte databyte;
-
+        System.out.println("################ Temperature Filter ############");
         while (true) {
-
-/***************************************************************
- *	The program can insert code for the filter operations
- * 	here. Note that data must be received and sent one
- * 	byte at a time. This has been done to adhere to the
- * 	pipe and filter paradigm and provide a high degree of
- * 	portabilty between filters. However, you must reconstruct
- * 	data on your own. First we read a byte from the input
- * 	stream...
- ***************************************************************/
-
-            try {
-                databyte = ReadFilterInputPort();
-
-/***************************************************************
- *	Here we could insert code to operate on the input stream...
- *  	Then we write a byte out to the output port.
- *********************************************a******************/
-                double value = databyte;
-                databyte = (byte) this.farToCelsius(value);
-                //System.out.println("Temperature F: " + value + " C: " + databyte);
-                WriteFilterOutputPort(databyte);
-            } catch (EndOfStreamException e) {
-                ClosePorts();
-                break;
-
-            } // catch
-
+            int ID = getInt();
+            writeInt(ID);
+            /*************************************************************************
+             * Read data
+             *************************************************************************/
+            switch (ID) {
+                /*************************************************************************
+                 * Tempo: Valor em milissegundos desde a Epoch (00:00:00 GMT em 1 de Janeiro, 1970).
+                 * Inteiro long
+                 * 8 Bytes
+                 *************************************************************************/
+                case 000: {
+                    long time = getLong();
+                    writeLong(time);
+                    break;
+                }
+                /*************************************************************************
+                 * Velocidade: velocidade do ar do veículo em nós por hora.
+                 * Double
+                 * 8 Bytes
+                 *************************************************************************/
+                case 001: {
+                    double speed = getDouble();
+                    writeDouble(speed);
+                    break;
+                }
+                /*************************************************************************
+                 * Altitude: Distância ao solo do veículo em pés.
+                 * Double
+                 * 8 Bytes
+                 *************************************************************************/
+                case 002: {
+                    double altitude = getDouble();
+                    writeDouble(altitude);
+                    break;
+                }
+                /*************************************************************************
+                 * Pressão: Pressão atmosférica à volta do veículo em PSI
+                 * Double
+                 * 8 Bytes
+                 *************************************************************************/
+                case 003: {
+                    double pressure = getDouble();
+                    writeDouble(pressure);
+                    break;
+                }
+                /*************************************************************************
+                 * Temperatura: temperatura do casco do veículo em Fahrenheit.
+                 * Double
+                 * 8 Bytes
+                 *************************************************************************/
+                case 004: {
+                    double temperature = getDouble();
+                    temperature = this.farToCelsius(temperature);
+                    writeDouble(temperature);
+                    break;
+                }
+                /*************************************************************************
+                 * Pitch: ângulo de elevação do nariz do veículo. Pitch 0 corresponde a uma posição paralela à terra.
+                 *  O valor positivo indica que o veículo vai a subir, negativo a descer.
+                 * Double
+                 * 8 Bytes
+                 *************************************************************************/
+                case 005: {
+                    double pitch = getDouble();
+                    writeDouble(pitch);
+                    break;
+                }
+            }
         } // while
 
     } // run
