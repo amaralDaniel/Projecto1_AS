@@ -39,7 +39,7 @@ public class Sink_Ex1 extends FilterFramework {
          *************************************************************************************/
 
         Calendar TimeStamp = Calendar.getInstance();
-        SimpleDateFormat TimeStampFormat = new SimpleDateFormat("yyyy:dd::hh:mm:ss");
+        SimpleDateFormat TimeStampFormat = new SimpleDateFormat("yyyy:dd:hh:mm:ss");
 
         long measurement;                // This is the word used to store all measurements - conversions are illustrated.
         int id;                            // This is the measurement id
@@ -125,9 +125,7 @@ public class Sink_Ex1 extends FilterFramework {
             /*
             * First Exercise output Time + Temperature + Altitude
             * */
-            System.out.print(TimeStampFormat.format(TimeStamp.getTime()) + "\t" + temperature + "\t" + altitude);
-            System.out.print("\n");
-
+            System.out.print(TimeStampFormat.format(TimeStamp.getTime()) + "\t" + temperature + "\t" + altitude + "\n");
         } // while
 
     } // run
