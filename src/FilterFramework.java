@@ -158,6 +158,7 @@ public class FilterFramework extends Thread {
 
     private PipedInputStream InputReadPort = new PipedInputStream();
     private PipedOutputStream OutputWritePort = new PipedOutputStream();
+    private PipedOutputStream OutputWritePort2 = new PipedOutputStream();
 
     // The following reference to a filter is used because java pipes are able to reliably
     // detect broken pipes on the input port of the filter. This variable will point to
@@ -226,7 +227,7 @@ public class FilterFramework extends Thread {
         try {
             // Connect this filter's input to the upstream pipe's output stream
 
-            InputReadPort.connect(Filter.OutputWritePort);
+            InputReadPort.connect(Filter.OutputWritePort2);
             InputFilter = Filter;
 
         } // try
@@ -328,6 +329,37 @@ public class FilterFramework extends Thread {
         try {
             OutputWritePort.write((int) datum);
             OutputWritePort.flush();
+
+        } // try
+
+        catch (Exception Error) {
+            System.out.println("\n" + this.getName() + " Pipe write error::" + Error);
+
+        } // catch
+
+        return;
+
+    } // WriteFilterPort
+
+    /***************************************************************************
+     * CONCRETE METHOD:: WriteFilterOutputPort
+     * Purpose: This method writes data to the output port one byte at a time.
+     * <p>
+     * Arguments:
+     * byte datum - This is the byte that will be written on the output port.of
+     * the filter.
+     * <p>
+     * Returns: void
+     * <p>
+     * Exceptions: IOException
+     ****************************************************************************/
+
+    void WriteFilterOutputPort2(byte datum) {
+        try {
+            OutputWritePort.write((int) datum);
+            OutputWritePort.flush();
+            OutputWritePort2.write((int) datum);
+            OutputWritePort2.flush();
 
         } // try
 
