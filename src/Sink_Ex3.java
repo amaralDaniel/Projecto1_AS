@@ -29,7 +29,7 @@ import java.util.Date;
  * public void run() - this method must be overridden by this class.
  ******************************************************************************************************************/
 
-public class Sink_Ex1 extends FilterFramework {
+public class Sink_Ex3 extends FilterFramework {
 
     public void run() {
         /************************************************************************************
@@ -121,11 +121,10 @@ public class Sink_Ex1 extends FilterFramework {
                     }
                 }
             } while (ID % 4 != 0 || ID == 0);
-                /*
-                * First Exercise output Time + Temperature + Altitude
-                * */
+            /*
+            * First Exercise output Time + Temperature + Altitude
+            * */
             System.out.print(TimeStampFormat.format(TimeStamp.getTime()) + "\t" + temperature + "\t" + altitude + "\n");
-
         } // while
 
     } // run

@@ -103,7 +103,6 @@ public class AltitudeFilter extends FilterFramework {
                     break;
                 }
             }
-
         } // while
 
     } // run

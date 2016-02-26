@@ -1,7 +1,3 @@
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
-import java.util.Arrays;
-
 /******************************************************************************************************************
  * File:FilterTemplate.java
  * Course: 17655
@@ -32,10 +28,10 @@ import java.util.Arrays;
 
 public class TemperatureFilter extends FilterFramework {
     /**
-     * @author Lizardo
-     * @description Fahrenheit to Celsius
      * @param value
      * @return
+     * @author Lizardo
+     * @description Fahrenheit to Celsius
      */
     private double farToCelsius(double value) {
         return ((value - 32.0) * 5.0) / 9.0;

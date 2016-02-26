@@ -35,17 +35,16 @@
 
 import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
-import java.nio.ByteBuffer;
 
 public class FilterFramework extends Thread {
 
     /**
-     * @author Lizardo
-     * @description write integers in bytes buffer
      * @param value
      * @return
+     * @author Lizardo
+     * @description write integers in bytes buffer
      */
-    public int writeInt(int value){
+    public int writeInt(int value) {
         /*
         * Int to Byte Array
         * */
@@ -61,12 +60,12 @@ public class FilterFramework extends Thread {
     }
 
     /**
-     * @author Lizardo
-     * @description write longs in bytes buffer
      * @param value
      * @return
+     * @author Lizardo
+     * @description write longs in bytes buffer
      */
-    public int writeLong(long value){
+    public int writeLong(long value) {
         /*
         * Long to Byte Array
         * */
@@ -90,12 +89,12 @@ public class FilterFramework extends Thread {
     }
 
     /**
-     * @author Lizardo
-     * @description write doubles in bytes buffer
      * @param value
      * @return
+     * @author Lizardo
+     * @description write doubles in bytes buffer
      */
-    public int writeDouble(double value){
+    public int writeDouble(double value) {
         /*
         * Double to Byte Array
         * */
@@ -104,52 +103,53 @@ public class FilterFramework extends Thread {
 
 
     /**
-     * @author Lizardo
-     * @description read integers from bytes buffer
      * @param number_of_bytes
      * @return
+     * @author Lizardo
+     * @description read integers from bytes buffer
      */
     private long read(int number_of_bytes) {
         long value = 0;
         for (int i = 0; i < number_of_bytes; i++) {
+            byte b = 0;
             try {
-                byte b = ReadFilterInputPort();
-                value = value | (0xFF & b);
-                if(i != number_of_bytes-1){
-                    value = value << 8;
-                }
-            } catch (EndOfStreamException e) {
-
+                b = ReadFilterInputPort();
+            } catch (EndOfStreamException e1) {
+                // pass
+            }
+            value = value | (0xFF & b);
+            if (i != number_of_bytes - 1) {
+                value = value << 8;
             }
         }
         return value;
     }
 
     /**
-     * @author Lizardo
-     * @description get an Integer from bytes buffer
      * @param
      * @return
+     * @author Lizardo
+     * @description get an Integer from bytes buffer
      */
     public int getInt() {
         return (int) read(4);
     }
 
     /**
-     * @author Lizardo
-     * @description get a Double from bytes buffer
      * @param
      * @return
+     * @author Lizardo
+     * @description get a Double from bytes buffer
      */
-    public double getDouble() {
+    public double getDouble(){
         return (double) read(8);
     }
 
     /**
-     * @author Lizardo
-     * @description get a Long from bytes buffer
      * @param
      * @return
+     * @author Lizardo
+     * @description get a Long from bytes buffer
      */
     public long getLong() {
         return read(8);
@@ -340,14 +340,7 @@ public class FilterFramework extends Thread {
      ****************************************************************************/
 
     private boolean EndOfInputStream() {
-        if (InputFilter.isAlive()) {
-            return false;
-
-        } else {
-
-            return true;
-
-        } // if
+        return !InputFilter.isAlive();
 
     } // EndOfInputStream
 
