@@ -53,6 +53,9 @@ public class Source_Ex1 extends FilterFramework {
 
             while(true)
             {
+                /*
+                * Just read bytes
+                * **/
                 databyte = in.readByte();
                 bytesread++;
                 WriteFilterOutputPort(databyte);

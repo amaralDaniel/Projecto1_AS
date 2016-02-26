@@ -1,5 +1,5 @@
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
+import java.util.Date;
 
 /******************************************************************************************************************
  * File:SinkFilterTemplate.java
@@ -37,8 +37,7 @@ public class Sink_Ex1 extends FilterFramework {
          * 	TimeStampFormat is used to format the time value so that it can be easily printed
          *	to the terminal.
          *************************************************************************************/
-
-        Calendar TimeStamp = Calendar.getInstance();
+        Date TimeStamp = new Date();
         SimpleDateFormat TimeStampFormat = new SimpleDateFormat("yyyy:dd:hh:mm:ss");
 
         long measurement;                // This is the word used to store all measurements - conversions are illustrated.
@@ -48,7 +47,6 @@ public class Sink_Ex1 extends FilterFramework {
         /*************************************************************
          *	First we announce to the world that we are alive...
          **************************************************************/
-
         System.out.print("\n" + this.getName() + "::Sink Reading \n");
 
         while (true) {
@@ -68,6 +66,8 @@ public class Sink_Ex1 extends FilterFramework {
                      *************************************************************************/
                     case 000: {
                         time = getLong();
+                        Date aux = new Date(time);
+                        TimeStamp.setTime(aux.getTime());
                         break;
                     }
                     /*************************************************************************
@@ -116,12 +116,12 @@ public class Sink_Ex1 extends FilterFramework {
                         pitch = getDouble();
                         break;
                     }
+                    default:{
+
+                    }
                 }
             } while (ID % 4 != 0 || ID == 0);
 
-            if (ID == 0) {
-                TimeStamp.setTimeInMillis(time);
-            }
             /*
             * First Exercise output Time + Temperature + Altitude
             * */

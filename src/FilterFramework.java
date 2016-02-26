@@ -35,6 +35,7 @@
 
 import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
+import java.nio.ByteBuffer;
 
 public class FilterFramework extends Thread {
 
@@ -45,11 +46,17 @@ public class FilterFramework extends Thread {
      * @return
      */
     public int writeInt(int value){
-        int number_of_bytes = 4;
-        for(int i=0; i<number_of_bytes;i++) {
-            byte b = (byte) (value >> (number_of_bytes-1-i)*8);
-            WriteFilterOutputPort(b);
-        }
+        /*
+        * Int to Byte Array
+        * */
+        byte v5 = (byte) (value >> 24);
+        WriteFilterOutputPort(v5);
+        byte v6 = (byte) (value >> 16);
+        WriteFilterOutputPort(v6);
+        byte v7 = (byte) (value >> 8);
+        WriteFilterOutputPort(v7);
+        byte v8 = (byte) value;
+        WriteFilterOutputPort(v8);
         return 1;
     }
 
@@ -60,11 +67,25 @@ public class FilterFramework extends Thread {
      * @return
      */
     public int writeLong(long value){
-        int number_of_bytes = 8;
-        for(int i=0; i<number_of_bytes;i++) {
-            byte b = (byte) (value >> (number_of_bytes-1-i)*8);
-            WriteFilterOutputPort(b);
-        }
+        /*
+        * Long to Byte Array
+        * */
+        byte v1 = (byte) (value >> 56);
+        WriteFilterOutputPort(v1);
+        byte v2 = (byte) (value >> 48);
+        WriteFilterOutputPort(v2);
+        byte v3 = (byte) (value >> 40);
+        WriteFilterOutputPort(v3);
+        byte v4 = (byte) (value >> 32);
+        WriteFilterOutputPort(v4);
+        byte v5 = (byte) (value >> 24);
+        WriteFilterOutputPort(v5);
+        byte v6 = (byte) (value >> 16);
+        WriteFilterOutputPort(v6);
+        byte v7 = (byte) (value >> 8);
+        WriteFilterOutputPort(v7);
+        byte v8 = (byte) value;
+        WriteFilterOutputPort(v8);
         return 1;
     }
 
@@ -75,13 +96,10 @@ public class FilterFramework extends Thread {
      * @return
      */
     public int writeDouble(double value){
-        int v = (int) value;
-        int number_of_bytes = 8;
-        for(int i=0; i<number_of_bytes;i++) {
-            byte b = (byte) (v >> (number_of_bytes-1-i)*8);
-            WriteFilterOutputPort(b);
-        }
-        return 1;
+        /*
+        * Double to Byte Array
+        * */
+        return writeLong((long) value);
     }
 
 
@@ -91,12 +109,15 @@ public class FilterFramework extends Thread {
      * @param number_of_bytes
      * @return
      */
-    private int read(int number_of_bytes) {
-        int value = 0;
+    private long read(int number_of_bytes) {
+        long value = 0;
         for (int i = 0; i < number_of_bytes; i++) {
             try {
                 byte b = ReadFilterInputPort();
-                value |= ((0xFF & b) << (number_of_bytes - i - 1) * 8);
+                value = value | (0xFF & b);
+                if(i != number_of_bytes-1){
+                    value = value << 8;
+                }
             } catch (EndOfStreamException e) {
 
             }
@@ -131,7 +152,7 @@ public class FilterFramework extends Thread {
      * @return
      */
     public long getLong() {
-        return (long) read(8);
+        return read(8);
     }
     // Define filter input and output ports
 
