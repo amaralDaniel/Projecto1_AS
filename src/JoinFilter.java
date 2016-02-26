@@ -46,7 +46,7 @@ public class JoinFilter extends FilterFramework {
                 }
 
             } catch (EndOfStreamException e1){
-                // nothing here
+                System.out.println("ENDED #######################################");
             } // catch
 
         } // while

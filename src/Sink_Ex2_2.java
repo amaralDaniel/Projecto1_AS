@@ -1,35 +1,10 @@
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-/******************************************************************************************************************
- * File:SinkFilterTemplate.java
- * Course: 17655
- * Project: Assignment 1
- * Copyright: Copyright (c) 2003 Carnegie Mellon University
- * Versions:
- * 1.0 November 2008 - Initial rewrite of original assignment 1 (ajl).
- * <p>
- * Description:
- * <p>
- * This class serves as a template for creating sink filters. The details of threading, connections writing output
- * are contained in the FilterFramework super class. In order to use this template the program should rename the class.
- * The template includes the run() method which is executed when the filter is started.
- * The run() method is the guts of the filter and is where the programmer should put their filter specific code.
- * In the template there is a main read-write loop for reading from the input port of the filter. The programmer is
- * responsible for writing the data to a file, or device of some kind. This template assumes that the filter is a sink
- * filter that reads data from the input file and writes the output from this filter to a file or device of some kind.
- * In this case, only the input port is used by the filter. In cases where the filter is a standard filter or a source
- * filter, you should use the FilterTemplate.java or the SourceFilterTemplate.java as a starting point for creating
- * standard or source filters.
- * <p>
- * Parameters: 		None
- * <p>
- * Internal Methods:
- * <p>
- * public void run() - this method must be overridden by this class.
- ******************************************************************************************************************/
-
-public class Sink_Ex3 extends FilterFramework {
+/**
+ * Created by danielamaral on 26/02/16.
+ */
+public class Sink_Ex2_2 extends FilterFramework {
 
     public void run() {
         /************************************************************************************
@@ -121,13 +96,14 @@ public class Sink_Ex3 extends FilterFramework {
                         }
                     }
                 } while (ID % 4 != 0 || ID == 0);
+
             /*
-            * First Exercise output Time + Temperature + Altitude
+            * Second Exercise output Time + Temperature + Altitude
             * */
-                System.out.print(TimeStampFormat.format(TimeStamp.getTime()) + "\t" + temperature + "\t" + altitude + "\n");
+                System.out.print(TimeStampFormat.format(TimeStamp.getTime()) + "\t" + pressure + "\n");
             } // while
 
-        }catch (EndOfStreamException ex){}
+        } catch (EndOfStreamException ex) {
+        }
     }// run
-
-} // FilterTemplate
+}

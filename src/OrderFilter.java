@@ -136,7 +136,12 @@ public class OrderFilter extends FilterFramework {
             double pitch = 0;
             double temperature = 0;
             do {
-                ID = getInt();
+
+                try {
+                    ID = getInt();
+                } catch (EndOfStreamException e) {
+                    e.printStackTrace();
+                }
                 /*************************************************************************
                  * Read data
                  *************************************************************************/

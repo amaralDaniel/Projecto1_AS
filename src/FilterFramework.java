@@ -131,7 +131,7 @@ public class FilterFramework extends Thread {
      * @author Lizardo
      * @description get an Integer from bytes buffer
      */
-    public int getInt() {
+    public int getInt() throws EndOfStreamException{
         return (int) read(4);
     }
 

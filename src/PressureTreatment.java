@@ -1,44 +1,16 @@
-/******************************************************************************************************************
- * File:FilterTemplate.java
- * Course: 17655
- * Project: Assignment 1
- * Copyright: Copyright (c) 2003 Carnegie Mellon University
- * Versions:
- * 1.0 November 2008 - Initial rewrite of original assignment 1 (ajl).
- * <p>
- * Description:
- * <p>
- * This class serves as a template for creating filters. The details of threading, filter connections, input, and output
- * are contained in the FilterFramework super class. In order to use this template the program should rename the class.
- * The template includes the run() method which is executed when the filter is started.
- * The run() method is the guts of the filter and is where the programmer should put their filter specific code.
- * In the template there is a main read-write loop for reading from the input port of the filter and writing to the
- * output port of the filter. This template assumes that the filter is a "normal" that it both reads and writes data.
- * That is both the input and output ports are used - its input port is connected to a pipe from an up-stream filter and
- * its output port is connected to a pipe to a down-stream filter. In cases where the filter is a source or sink, you
- * should use the SourceFilterTemplate.java or SinkFilterTemplate.java as a starting point for creating source or sink
- * filters.
- * <p>
- * Parameters: 		None
- * <p>
- * Internal Methods:
- * <p>
- * public void run() - this method must be overridden by this class.
- ******************************************************************************************************************/
+import java.util.ArrayList;
 
-public class TemperatureFilter extends FilterFramework {
-    /**
-     * @param value
-     * @return
-     * @author Lizardo
-     * @description Fahrenheit to Celsius
-     */
-    private double farToCelsius(double value) {
-        return ((value - 32.0) * 5.0) / 9.0;
-    }
+/**
+ * Created by danielamaral on 26/02/16.
+ */
+public class PressureTreatment extends FilterFramework {
+
+    ArrayList<DataNode> data = new ArrayList<DataNode>();
+    private double previous=0.0,actual=0.0,next=0.0;
 
     public void run() {
-        System.out.println("################ Temperature Filter ############");
+        DataNode tempNode;
+        System.out.println("################ Pressure Filter ############");
         try {
             while (true) {
                 int ID = getInt();
@@ -53,8 +25,10 @@ public class TemperatureFilter extends FilterFramework {
                      * 8 Bytes
                      *************************************************************************/
                     case 000: {
-                        long time = getLong();
-                        writeLong(time);
+                        double time = getDouble();
+                        tempNode = new DataNode(000, time);
+                        data.add(tempNode);
+                        //writeLong(time);
                         break;
                     }
                     /*************************************************************************
@@ -64,7 +38,9 @@ public class TemperatureFilter extends FilterFramework {
                      *************************************************************************/
                     case 001: {
                         double speed = getDouble();
-                        writeDouble(speed);
+                        tempNode = new DataNode(001, speed);
+                        data.add(tempNode);
+                        //writeDouble(speed);
                         break;
                     }
                     /*************************************************************************
@@ -74,7 +50,9 @@ public class TemperatureFilter extends FilterFramework {
                      *************************************************************************/
                     case 002: {
                         double altitude = getDouble();
-                        writeDouble(altitude);
+                        tempNode = new DataNode(002, altitude);
+                        data.add(tempNode);
+                        //writeDouble(altitude);
                         break;
                     }
                     /*************************************************************************
@@ -84,7 +62,9 @@ public class TemperatureFilter extends FilterFramework {
                      *************************************************************************/
                     case 003: {
                         double pressure = getDouble();
-                        writeDouble(pressure);
+                        tempNode = new DataNode(003, pressure);
+                        data.add(tempNode);
+                        //writeDouble(pressure);
                         break;
                     }
                     /*************************************************************************
@@ -94,8 +74,9 @@ public class TemperatureFilter extends FilterFramework {
                      *************************************************************************/
                     case 004: {
                         double temperature = getDouble();
-                        temperature = this.farToCelsius(temperature);
-                        writeDouble(temperature);
+                        tempNode = new DataNode(004, temperature);
+                        data.add(tempNode);
+                        //writeDouble(temperature);
                         break;
                     }
                     /*************************************************************************
@@ -106,14 +87,48 @@ public class TemperatureFilter extends FilterFramework {
                      *************************************************************************/
                     case 005: {
                         double pitch = getDouble();
-                        writeDouble(pitch);
+                        tempNode = new DataNode(005, pitch);
+                        data.add(tempNode);
+                        //writeDouble(pitch);
                         break;
                     }
+                    default:
+                        break;
                 }
             } // while
-
-        } catch (EndOfStreamException ex) {
+        }catch(EndOfStreamException ex) {
+            this.treatment(data);
+            System.out.println("DID THE TREATMENT!!!");
         }
-    }// run
+    } // run
 
-} // FilterTemplate
+
+    void treatment(ArrayList<DataNode> data){
+
+        for(int i=0;i<data.size();i++){
+            if(data.get(i).getId()==003){
+                if(data.get(i).getDataValue()< 50.0 || data.get(i).getDataValue() > 80.0  ){
+                    if(previous!=0.0){
+                        for(int j=i;j<data.size();j++){
+                            if(data.get(j).getId()==003 && (data.get(j).getDataValue()>50.0 && data.get(j).getDataValue()<80.0)) //valid
+                                next=data.get(j).getDataValue();
+                        }
+                        if(next!=0.0){
+                            data.get(i).setDataValue((previous+next)/2);
+                            previous = (previous+next)/2;
+                        }else{
+                            data.get(i).setDataValue(previous);
+                        }
+                    }else{
+                        for(int k=i;k<data.size();k++){
+                            if(data.get(k).getId()==003 && (data.get(i).getDataValue()>50.0 && data.get(i).getDataValue()<80.0)){
+                                next = data.get(k).getDataValue();
+                                data.get(i).setDataValue(next);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
