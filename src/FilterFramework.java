@@ -223,6 +223,7 @@ public class FilterFramework extends Thread {
 
     } // Connect
 
+
     void Connect2(FilterFramework Filter) {
         try {
             // Connect this filter's input to the upstream pipe's output stream
