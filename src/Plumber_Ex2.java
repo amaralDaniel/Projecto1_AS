@@ -20,19 +20,18 @@ public class Plumber_Ex2 {
         * Idea: Input.connect(element.output)
         * */
 
-        //sink1.Connect(pressure_treatment);
-       // sink2.Connect(pressure_savage);
-        //pressure_treatment.Connect(split);
-       // pressure_savage.Connect(split);
-        //split.Connect(altitude_f);
-        //altitude_f.Connect(temperature_f);
-        //temperature_f.Connect(source);
+        sink1.Connect(pressure_treatment);
+        sink2.Connect(pressure_savage);
+        pressure_savage.Connect(split);
+        pressure_treatment.Connect2(split);
+        split.Connect(altitude_f);
+        altitude_f.Connect(temperature_f);
+        temperature_f.Connect(source);
 
         /**
          * Start all component
          * */
         source.start();
-
         temperature_f.start();
         altitude_f.start();
         split.start();

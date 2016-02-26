@@ -6,7 +6,6 @@ public class Plumber_Ex3 {
         /*
         * Init the components ( filters, sink and source )
         * */
-        Source_A_Ex3 sourceA = new Source_A_Ex3();
         Source_B_Ex3 sourceB = new Source_B_Ex3();
         JoinFilter joinFilter = new JoinFilter();
         OrderFilter orderFilter = new OrderFilter();
@@ -19,7 +18,6 @@ public class Plumber_Ex3 {
         sink.Connect(orderFilter);
         orderFilter.Connect(joinFilter);
         joinFilter.Connect(sourceB);
-        joinFilter.Connect(sourceA);
         /**
          * Start all component
          * */
